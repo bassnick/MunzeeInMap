@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Get Deployed Types Stats";
+}
+<html>
+<head>
+</head>
+<body>
+    <h2>Získání statistik jednotlivých deploy hráče</h2>
+    @using (Html.BeginForm("GetDeployedTypesStats", "MunzeeInMap", FormMethod.Post))
+    {
+
+        <input type="text" value="RQWp5YTNQSg4ShNEOEvr1d82zbrXYShYiyi2rGwC" name="access_token" /><br />
+        <input type="text" value="coolant" name="username" />
+        <input type="submit" value="Odeslat" />
+    }
+</body>
+</html>

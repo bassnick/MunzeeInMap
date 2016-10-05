@@ -1,0 +1,9 @@
+﻿Entry Types
+Type ID 	description 			can be created
+---------------------------------------------
+1 			General Comment 		yes
+2 			Found It 				no
+3 			Unable to Locate 		yes
+4 			Needs Repair 			yes
+5 			Report a Violation 		no
+6 			Verified 				no

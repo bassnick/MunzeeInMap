@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Get For Range";
+}
+<html>
+<head>
+</head>
+<body>
+    <h2>Získání globálních statistik</h2>
+    @using (Html.BeginForm("GetForRange", "MunzeeInMap", FormMethod.Post))
+    {
+
+        <input type="text" value="RQWp5YTNQSg4ShNEOEvr1d82zbrXYShYiyi2rGwC" name="access_token"/>
+        <input type="text" value="2014-12-31" name="start"/>
+        <input type="text" value="2015-04-30" name="end" /> 
+        <input type="text" value="10" name="limit" />
+        <input type="submit" value="Odeslat" />
+    }
+</body>
+</html>

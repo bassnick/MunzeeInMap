@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "GetClanId";
+}
+<html>
+<head>
+</head>
+<body>
+    <h2>Získání id klanu</h2>
+    @using (Html.BeginForm("GetClanId", "MunzeeInMap", FormMethod.Post))
+    {
+
+        <input type="text" value="RQWp5YTNQSg4ShNEOEvr1d82zbrXYShYiyi2rGwC" name="access_token" /><br />
+    <input type="text" value="baanti" name="simple_name" />
+        <input type="submit" value="Odeslat" />
+    }
+</body>
+</html>

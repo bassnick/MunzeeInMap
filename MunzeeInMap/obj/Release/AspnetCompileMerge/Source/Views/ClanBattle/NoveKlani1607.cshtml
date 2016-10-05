@@ -1,0 +1,82 @@
+﻿@using MunzeeInMap.MunzeeAppObjects
+@model System.Collections.Generic.List<MunzeeInMap.MunzeeAppObjects.NewClan1607>
+
+@{
+    ViewBag.Title = "Klání 16/07";
+}
+<br />
+@Html.RouteLink("Autorizace pro GPX data pro GeoGet", "Autorizace")
+<br/>
+<strong>Data se s každým zobrazením stránky načtou online aktuální pro danou chvíli. Data jsou z oficiálních klanových statistik MHQ.</strong>
+<br/>
+
+@foreach (var klan in Model)
+{
+    int clanTotalModifiedPoints = 0;
+
+    Level1607 levelRequirements = new Level1607();
+
+    if (klan.DetailScore.finalLevel == 0)
+    {
+        continue;
+    }
+    Requirements1607 req = levelRequirements.level[klan.DetailScore.finalLevel];
+
+    <article>
+        <table class="klan">
+            <thead>
+            <tr class="popis"><td colspan="2">Klání 16/07 - @klan.ClanName - cíl: level @klan.DetailScore.finalLevel.ToString()</td></tr>
+            <tr><th>Hráč</th>@*<th>Deploy body</th><th>Capture body</th><th>Capture On body</th>*@<th>Klanové body</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var x in klan.DetailScore.total_points)
+            {
+
+                clanTotalModifiedPoints += x.Value;
+
+                int rest = x.Value - req.ModifiedPts;
+                bool donePlayer = rest >= 0;
+
+                string printOK = ":)";
+                <tr>
+                    <td><strong>@x.Key</strong></td>
+                    <td>@x.Value
+                        @if (donePlayer)
+                        {
+                            <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
+                        }
+                        else
+                        {
+                            <span>(<strong>@rest</strong>)</span>
+                        }
+                        <span> (@((1000*x.Value)/req.ClanModifiedPts)%;@if (x.Value < req.ClanModifiedPts/10)
+                                                                       {
+                                                                           <span>@(x.Value - (req.ClanModifiedPts/10))</span>
+                                                                       })</span>    
+                    </td>
+                </tr>
+            }
+
+            </tbody>
+            <tfoot>
+            @{
+                int restClanPoints = clanTotalModifiedPoints - req.ClanModifiedPts;
+                bool doneClan = restClanPoints >= 0;
+            }
+            <tr class="popis">
+                <td></td>
+                <td>@clanTotalModifiedPoints.ToString()
+                    @if (doneClan)
+                    {
+                        <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
+                    }
+                    else
+                    {
+                        <span><strong>(@restClanPoints)</strong></span>
+                    }
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </article>
+}

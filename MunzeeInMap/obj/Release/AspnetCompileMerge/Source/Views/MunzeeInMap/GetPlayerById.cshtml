@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "GetPlayerById";
+}
+<html>
+<head>
+</head>
+<body>
+    <h2>Získání hráče podle IDu</h2>
+    @using (Html.BeginForm("GetPlayerById", "MunzeeInMap", FormMethod.Post))
+    {
+
+        <input type="text" value="RQWp5YTNQSg4ShNEOEvr1d82zbrXYShYiyi2rGwC" name="access_token" /><br />
+        <input type="text" value="9" name="user_id">
+        <input type="submit" value="Odeslat" />
+    }
+</body>
+</html>
