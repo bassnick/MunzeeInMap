@@ -6,7 +6,7 @@ namespace MunzeeInMap.Controllers
 {
     public class ClanBattleController : Controller
     {
-        private string defaultToken = "RQWp5YTNQSg4ShNEOEvr1d82zbrXYShYiyi2rGwC";
+        private string defaultToken = "Jf2fB2CbqlOiMWlWZ2Fh4ASazvoZlDqcxhEbKelt";
         string cookieName = "bassnick_munzee_in_map";
         string cookieNameId = "bassnick_munzee_in_map_userId";
 
@@ -79,7 +79,7 @@ namespace MunzeeInMap.Controllers
             };
             return resultClan;
         }
-
+/*
         public ActionResult NoveKlani()
         {
 
@@ -109,17 +109,17 @@ namespace MunzeeInMap.Controllers
             var renegati = ConcreteNewClanResults("Renegades.CZ", 955, 1);
             clans.Add(renegati);
 
-            /*
-            var topRezervy = ConcreteNewClanResults("TopRezervy.CZ", 906, 2);
-            clans.Add(topRezervy);
-            */
+           
+           // var topRezervy = ConcreteNewClanResults("TopRezervy.CZ", 906, 2);
+           // clans.Add(topRezervy);
+            
 
             var topRelax = ConcreteNewClanResults("TopRelax.CZ", 896, 1);
             clans.Add(topRelax);
 
             return View("NoveKlani", "", clans);
         }
-
+    */
         private NewClan1607 ConcreteNewClanResults(string clanName, int clanId, int declaredLevel)
         {
             FormCollection fd = new FormCollection();
