@@ -1,5 +1,0 @@
-C:\Proj\.NET\MunzeeInMap\ConsoleTester\bin\Debug\ConsoleTester.exe.config
-C:\Proj\.NET\MunzeeInMap\ConsoleTester\bin\Debug\ConsoleTester.exe
-C:\Proj\.NET\MunzeeInMap\ConsoleTester\bin\Debug\ConsoleTester.pdb
-C:\Proj\.NET\MunzeeInMap\ConsoleTester\obj\Debug\ConsoleTester.exe
-C:\Proj\.NET\MunzeeInMap\ConsoleTester\obj\Debug\ConsoleTester.pdb

@@ -9,7 +9,6 @@ namespace MunzeeInMap.Controllers
         private string defaultToken = "lrj2RzH7kTkQEQwSLmDAbBRWYRtY7Hs9qhIO4OAZ";
         string cookieName = "bassnick_munzee_in_map";
         string cookieNameId = "bassnick_munzee_in_map_userId";
-        private string test = "";
         //
         // GET: /Klani/
         public ActionResult Klani()
