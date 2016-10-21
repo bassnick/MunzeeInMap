@@ -78,7 +78,7 @@ namespace MunzeeInMap.MunzeeAppObjects
 
             if (indexOfActivityPts != -1)
             {
-                indexOfActivityPts += "\"total deploys\":{".Length;
+                indexOfActivityPts += "\"activity points\":{".Length;
                 int indexOfEndTotalTotalJewelDeploys = str.IndexOf('}', indexOfActivityPts);
                 string[] AP = str.Substring(indexOfActivityPts, indexOfEndTotalTotalJewelDeploys - indexOfActivityPts).Split(',');
                 activity_points = GetPlayers(AP);
