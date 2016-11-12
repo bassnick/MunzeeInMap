@@ -13,7 +13,7 @@ namespace MunzeeInMap
     {
         public static async Task<string> Login()
         {
-            string token = "Kg8jHmlcWX7vM5LbosS8nCzwZvB7SfAPwnI3qfwD";
+            string token = "Kwpop9uu6QNdBMNyXwDqViBIxRd3HS3vUegBlx88";
             string result = await LogIn(new Uri("https://api.munzee.com/oauth/login"), token);
             return result;
         }
