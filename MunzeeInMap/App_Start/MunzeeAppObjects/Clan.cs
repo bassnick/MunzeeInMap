@@ -5,6 +5,164 @@ using System.Linq;
 
 namespace MunzeeInMap.MunzeeAppObjects
 {
+    public class Clan1612
+    {
+        public int ClanId { get; set; }
+        public string ClanName { get; set; }
+        public Battle1612 DetailScore { get; set; }
+    }
+
+    public class Battle1612 /* TODO HERE*/
+    {
+        public Dictionary<string, int> deploy_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> capture_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> capture_on_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> total_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> number_deps = new Dictionary<string, int>(10);
+        public Dictionary<string, int> number_deps_green = new Dictionary<string, int>(10);
+        public Dictionary<string, int> number_caps = new Dictionary<string, int>(10);
+        public Dictionary<string, int> number_caps_green = new Dictionary<string, int>(10);
+
+        public Dictionary<int, string> playerOrder = new Dictionary<int, string>(10);
+
+        public int finalLevel;
+        public int actualLevel;
+
+        public Battle1612(string str, int finalLevel)
+        {
+            int indexOfResult = str.IndexOf('{', 5) + 1;
+            if (indexOfResult == 0)
+            {
+                return;
+            }
+            /* deploy */
+            int indexOfDeployPts = str.IndexOf("\"deploy\":{");
+
+            /* capture */
+            int indexOfCapturePts = str.IndexOf("\"capture\":{");
+
+            /* capture on */
+            int indexOfCaptureOnPts = str.IndexOf("\"capture_on\":{");
+
+            /* total */
+            int indexOfTotalPts = str.IndexOf("\"total\":{");
+
+            /* number deployed */
+            int indexOfND = str.IndexOf("\"number of deployed\":{");
+
+            /* number of deployed greenies */
+            int indexOfNDGreen = str.IndexOf("\"number of deployed greenies\":{");
+            
+            /* number ceptured */
+            int indexOfNC = str.IndexOf("\"number of captured\":{");
+
+            /* number of captured greenies */
+            int indexOfNCGreen = str.IndexOf("\"number of captured greenies\":{");
+
+            if (indexOfDeployPts != -1)
+            {
+                indexOfDeployPts += "\"deploy\":{".Length;
+                int indexOfEndDeployPts = str.IndexOf('}', indexOfDeployPts);
+
+                string[] deployesPts =
+                    str.Substring(indexOfDeployPts, indexOfEndDeployPts - indexOfDeployPts).Split(',');
+                deploy_points = GetPlayers(deployesPts);
+            }
+
+            if (indexOfCapturePts != -1)
+            {
+                indexOfCapturePts += "\"capture\":{".Length;
+                int indexOfEndCapturePts = str.IndexOf('}', indexOfCapturePts);
+                string[] capturesPts =
+                    str.Substring(indexOfCapturePts, indexOfEndCapturePts - indexOfCapturePts).Split(',');
+                capture_points = GetPlayers(capturesPts);
+            }
+            if (indexOfCaptureOnPts != -1)
+            {
+                indexOfCaptureOnPts += "\"capture_on\":{".Length;
+                int indexOfEndCaptureOnPts = str.IndexOf('}', indexOfCaptureOnPts);
+                string[] capturesOnPts =
+                    str.Substring(indexOfCaptureOnPts, indexOfEndCaptureOnPts - indexOfCaptureOnPts).Split(',');
+                capture_on_points = GetPlayers(capturesOnPts);
+            }
+            if (indexOfTotalPts != -1)
+            {
+                indexOfTotalPts += "\"total\":{".Length;
+                int indexOfEndTotalPts = str.IndexOf('}', indexOfTotalPts);
+                string[] totalsPts = str.Substring(indexOfTotalPts, indexOfEndTotalPts - indexOfTotalPts).Split(',');
+                total_points = GetPlayers(totalsPts);
+                /*string[] totalModifiedPts = str.Substring(indexOfTotalModified, indexOEndTotalModified - indexOfTotalModified + 1).Split(',');*/
+                total_points = GetPlayers(totalsPts);
+            }
+
+            if (indexOfND != -1)
+            {
+                indexOfND += "\"number of deployed\":{".Length;
+                int indexOfEndND = str.IndexOf('}', indexOfND);
+                string[] ND = str.Substring(indexOfND, indexOfEndND - indexOfND).Split(',');
+                number_deps = GetPlayers(ND);
+            }
+
+            if (indexOfNDGreen != -1)
+            {
+                indexOfNDGreen += "\"number of deployed greenies\":{".Length;
+                int indexOfEndNDGreen = str.IndexOf('}', indexOfNDGreen);
+                string[] NDG = str.Substring(indexOfNDGreen, indexOfEndNDGreen - indexOfNDGreen).Split(',');
+                number_deps_green = GetPlayers(NDG);
+            }
+
+            if (indexOfNC != -1)
+            {
+                indexOfNC += "\"number of captured\":{".Length;
+                int indexOfEndNC = str.IndexOf('}', indexOfNC);
+                string[] NC = str.Substring(indexOfNC, indexOfEndNC - indexOfNC).Split(',');
+                number_caps = GetPlayers(NC);
+            }
+
+            if (indexOfNCGreen != -1)
+            {
+                indexOfNCGreen += "\"number of captured greenies\":{".Length;
+                int indexOfEndNCGreen = str.IndexOf('}', indexOfNCGreen);
+                string[] NCG = str.Substring(indexOfNCGreen, indexOfEndNCGreen - indexOfNCGreen).Split(',');
+                number_caps_green = GetPlayers(NCG);
+            }
+
+
+            List<int> list = total_points.Values.ToList();
+            list.Sort();
+            list.Reverse();
+
+            for (int i = 0; i < 10;)
+            {
+                foreach (var playerRecord in total_points)
+                {
+                    if (i >= list.Count || playerRecord.Value == list[i])
+                    {
+                        if (!playerOrder.ContainsValue(playerRecord.Key))
+                            playerOrder.Add(i + 1, playerRecord.Key);
+                        i++;
+                    }
+                }
+            }
+            this.finalLevel = finalLevel;
+        }
+
+        private static Dictionary<string, int> GetPlayers(string[] jsonString)
+        {
+            Dictionary<string, int> playersScores = new Dictionary<string, int>(10);
+            foreach (var jstr in jsonString)
+            {
+                string[] d = jstr.Split(':');
+                int value;
+                int.TryParse(d[1].Trim(new char[] { '"', ' ' }), out value);
+                playersScores.Add(d[0].Trim('"'), value);
+
+            }
+            return playersScores;
+        }
+    }
+
+
     public class Clan1611
     {
         public int ClanId { get; set; }
@@ -202,7 +360,52 @@ namespace MunzeeInMap.MunzeeAppObjects
             this.finalLevel = finalLevel;
         }
     }
-    
+
+    public class Level1612
+    {
+        public Dictionary<int, Requirements1612> level = new Dictionary<int, Requirements1612>();
+
+        public Level1612()
+        {
+            level.Add(1, new Requirements1612()
+            {
+                PlayerDeployGreen = 2,
+                PlayerCapturesGreen = 10,
+                ClanDeploys = 35,
+                ClanCaptures = 200
+
+            });
+            level.Add(2, new Requirements1612()
+            {
+                PlayerDeployGreen = 4,
+                PlayerCapturesGreen = 20,
+                ClanDeploys = 75,
+                ClanCaptures = 400
+            });
+            level.Add(3, new Requirements1612()
+            {
+                PlayerDeployGreen = 6,
+                PlayerCapturesGreen = 30,
+                ClanDeploys = 125,
+                ClanCaptures = 600
+            });
+            level.Add(4, new Requirements1612()
+            {
+                PlayerDeployGreen = 8,
+                PlayerCapturesGreen = 40,
+                ClanDeploys = 200,
+                ClanCaptures = 800
+            });
+            level.Add(5, new Requirements1612()
+            {
+                PlayerDeployGreen = 10,
+                PlayerCapturesGreen = 50,
+                ClanDeploys = 300,
+                ClanCaptures = 1000
+            });
+        }
+    }
+
     public class Level1611
     {
         public Dictionary<int, Requirements1611> level = new Dictionary<int, Requirements1611>();
@@ -247,7 +450,17 @@ namespace MunzeeInMap.MunzeeAppObjects
             });
         }
     }
-public class Requirements1611
+
+    public class Requirements1612
+    {
+        public int PlayerCapturesGreen;
+        public int PlayerDeployGreen;
+        public int ClanDeploys;
+        public int ClanCaptures;
+    }
+
+
+    public class Requirements1611
     {
         public int PlayerTotal;
         public int ClanTotal;
