@@ -6,7 +6,7 @@ namespace MunzeeInMap.Controllers
 {
     public class ClanBattleController : Controller
     {
-        private string defaultToken = "exzY2t7g8pGRJfkI8oLWRa8Tj0WHG4TrL2Xu0HEx";
+        private string defaultToken = "AlJnQBamnf5yW2Irt2arCQFPmwzXTXYiy31J64Nc";
         string cookieName = "bassnick_munzee_in_map";
         string cookieNameId = "bassnick_munzee_in_map_userId";
 
@@ -37,7 +37,7 @@ namespace MunzeeInMap.Controllers
             var bazanti = ConcreteClanResults1612("Bažanti", 442, 3);
             clans.Add(bazanti);
 
-            var renegati = ConcreteClanResults1612("Renegades.CZ", 955, 2);
+            var renegati = ConcreteClanResults1612("Renegades.CZ", 955, 3);
             clans.Add(renegati);
 
             
