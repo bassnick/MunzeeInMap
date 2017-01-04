@@ -9,155 +9,163 @@
 <br/>
 <strong>Data z oficiálních klanových statistik MHQ. Aktualizováno jednou denně se začátkem munzee dne (tj. půlnoc Texaského času). U nás ráno v 7:00</strong>
 <br/>
-
-@foreach (var klan in Model)
+@if (DateTime.Now > new DateTime(2017, 1, 3, 6, 59, 59))
 {
-    Level1612 levelRequirements = new Level1612();
+    <div>Funkcionalita pro aktuální klání nebyla ještě naprogramována.</div>
+}
+else
+{
+    foreach (var klan in Model)
+    {
+        Level1612 levelRequirements = new Level1612();
 
-    if (klan.DetailScore.finalLevel == 0)
-    { continue; }
-    Requirements1612 req = levelRequirements.level[klan.DetailScore.finalLevel];
-                
-    <article>
-        <table class="klan">
-            <thead>
+        if (klan.DetailScore.finalLevel == 0)
+        {
+            continue;
+        }
+        Requirements1612 req = levelRequirements.level[klan.DetailScore.finalLevel];
+
+        <article>
+            <table class="klan">
+                <thead>
                 <tr class="popis"><td colspan="4">Klání 16/12 - @klan.ClanName - cíl: level @klan.DetailScore.finalLevel.ToString()</td></tr>
-            <tr><th>Hráč</th>@*<th>Deploy body</th><th>Capture body</th><th>Capture On body</th>*@<th>Počet zelených deploys</th><th>Počet zelených captures</th><th>Počet deploys</th><th>Počet captures</th></tr>
-            </thead>
-            <tbody>
-            @{
-                int bodovaniHraci = klan.DetailScore.playerOrder.Count;
-                //int clanTotalPoints = 0;
-                int clanDeploysGreen = 0;
-                int clanCapturesGreen = 0;
-                int clanDeploys = 0;
-                int clanCaptures = 0;
+                <tr><th>Hráč</th>@*<th>Deploy body</th><th>Capture body</th><th>Capture On body</th>*@<th>Počet zelených deploys</th><th>Počet zelených captures</th><th>Počet deploys</th><th>Počet captures</th></tr>
+                </thead>
+                <tbody>
+                @{
+                    int bodovaniHraci = klan.DetailScore.playerOrder.Count;
+                    //int clanTotalPoints = 0;
+                    int clanDeploysGreen = 0;
+                    int clanCapturesGreen = 0;
+                    int clanDeploys = 0;
+                    int clanCaptures = 0;
 
-            }
-            @for (int poradi = 0; poradi < bodovaniHraci; poradi++)
-            {
+                }
+                @for (int poradi = 0; poradi < bodovaniHraci; poradi++)
+                {
 
-                Battle1612 battle = @klan.DetailScore;
-                string player = @battle.playerOrder[poradi + 1];
-                //int tot = (battle.total_points.ContainsKey(player)) ? battle.total_points[player] : 0;
-                int ndg = (battle.number_deps_green.ContainsKey(player)) ? battle.number_deps_green[player] : 0;
-                int ncg = (battle.number_caps_green.ContainsKey(player)) ? battle.number_caps_green[player] : 0;
-                int nd = (battle.number_deps.ContainsKey(player)) ? battle.number_deps[player] : 0;
-                int nc = (battle.number_caps.ContainsKey(player)) ? battle.number_caps[player] : 0;
+                    Battle1612 battle = @klan.DetailScore;
+                    string player = @battle.playerOrder[poradi + 1];
+                    //int tot = (battle.total_points.ContainsKey(player)) ? battle.total_points[player] : 0;
+                    int ndg = (battle.number_deps_green.ContainsKey(player)) ? battle.number_deps_green[player] : 0;
+                    int ncg = (battle.number_caps_green.ContainsKey(player)) ? battle.number_caps_green[player] : 0;
+                    int nd = (battle.number_deps.ContainsKey(player)) ? battle.number_deps[player] : 0;
+                    int nc = (battle.number_caps.ContainsKey(player)) ? battle.number_caps[player] : 0;
 
-                //bool donePlayer = (rest >= 0 && restDeps >= 0);
+                    //bool donePlayer = (rest >= 0 && restDeps >= 0);
 
-                //clanTotalPoints += tot;
-                clanDeploysGreen += ndg;
-                clanCapturesGreen += ncg;
-                clanDeploys += nd;
-                clanCaptures += nc;
+                    //clanTotalPoints += tot;
+                    clanDeploysGreen += ndg;
+                    clanCapturesGreen += ncg;
+                    clanDeploys += nd;
+                    clanCaptures += nc;
 
-                int restDG = ndg - req.PlayerDeployGreen;
-                int restCG = ncg - req.PlayerCapturesGreen;
+                    int restDG = ndg - req.PlayerDeployGreen;
+                    int restCG = ncg - req.PlayerCapturesGreen;
 
 
-                string printOK = ":)";
-                <tr>
-                    <td><strong>@player</strong></td>
-                    <td>@ndg
-                        @if (restDG >= 0)
-                        {
-                            <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
-                        }
-                        else
-                        {
-                            <span>(<strong>@restDG</strong>)</span>
-                        }
-                    </td>
-                    <td>
-                        @ncg
+                    string printOK = ":)";
+                    <tr>
+                        <td><strong>@player</strong></td>
+                        <td>@ndg
+                            @if (restDG >= 0)
+                            {
+                                <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
+                            }
+                            else
+                            {
+                                <span>(<strong>@restDG</strong>)</span>
+                            }
+                        </td>
+                        <td>
+                            @ncg
                             @if (restCG >= 0)
                             {
-                                <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png" />
+                                <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
                             }
                             else
                             {
                                 <span>(<strong>@restCG</strong>)</span>
                             }
-                    </td>
-                    <td>
-                        @nd
-                        <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
+                        </td>
+                        <td>
+                            @nd
+                            <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
 
-                        @if (req.ClanDeploys != 0)
-                        {
-                            <span>(@((1000*nd)/req.ClanDeploys)%;
+                            @if (req.ClanDeploys != 0)
+                            {
+                                <span>(@((1000*nd)/req.ClanDeploys)%;
                                 @if (nd < req.ClanDeploys/10)
                                 {
                                     <span>@(nd - (req.ClanDeploys/10))</span>
                                 }
                                 )</span>
-                        }
+                            }
 
-                    </td>
-                    <td>
-                        @nc
-                        <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png" />
+                        </td>
+                        <td>
+                            @nc
+                            <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
 
-                        @if (req.ClanCaptures != 0)
-                        {
-                            <span>
-                                (@((1000 * nc) / req.ClanCaptures)%;
-                                @if (nc < req.ClanCaptures / 10)
+                            @if (req.ClanCaptures != 0)
+                            {
+                                <span>
+                                (@((1000*nc)/req.ClanCaptures)%;
+                                @if (nc < req.ClanCaptures/10)
                                 {
-                                    <span>@(nc - (req.ClanCaptures / 10))</span>
+                                    <span>@(nc - (req.ClanCaptures/10))</span>
                                 }
                                 )
                             </span>
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+                <tfoot>
+                @{
+                    int restClanD = clanDeploys - req.ClanDeploys;
+                    int restClanC = clanCaptures - req.ClanCaptures;
+
+                    bool doneClan1 = restClanD >= 0;
+                    bool doneClan2 = restClanC >= 0;
+
+                }
+                <tr class="popis">
+                    <td></td>
+                    <td>@clanDeploysGreen.ToString()
+                        <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
+                    </td>
+                    <td>
+                        @clanCapturesGreen.ToString()
+                        <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
+                    </td>
+                    <td>
+                        @clanDeploys.ToString()
+                        @if (doneClan1)
+                        {
+                            <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
+                        }
+                        else
+                        {
+                            <span><strong>(@restClanD)</strong></span>
                         }
                     </td>
-            </tr>
-            }
-            </tbody>
-            <tfoot>
-            @{
-                int restClanD = clanDeploys - req.ClanDeploys;
-                int restClanC = clanCaptures - req.ClanCaptures;
+                    <td>
+                        @clanCaptures.ToString()
+                        @if (doneClan2)
+                        {
+                            <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
+                        }
+                        else
+                        {
+                            <span><strong>(@restClanC)</strong></span>
+                        }
+                    </td>
 
-                bool doneClan1 = restClanD >= 0;
-                bool doneClan2 = restClanC >= 0;
-
-            }
-            <tr class="popis">
-                <td></td>
-                <td>@clanDeploysGreen.ToString()
-                        <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
-                </td>
-                <td>
-                    @clanCapturesGreen.ToString()
-                        <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
-                </td>
-                <td>
-                    @clanDeploys.ToString()
-                    @if (doneClan1)
-                    {
-                        <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
-                    }
-                    else
-                    {
-                        <span><strong>(@restClanD)</strong></span>
-                    }
-                </td>
-                <td>
-                    @clanCaptures.ToString()
-                    @if (doneClan2)
-                    {
-                        <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png" />
-                    }
-                    else
-                    {
-                        <span><strong>(@restClanC)</strong></span>
-                    }
-                </td>
-
-              </tr>
-            </tfoot>
-        </table>
-    </article>
+                </tr>
+                </tfoot>
+            </table>
+        </article>
+    }
 }
