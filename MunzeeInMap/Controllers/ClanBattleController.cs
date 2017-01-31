@@ -6,7 +6,7 @@ namespace MunzeeInMap.Controllers
 {
     public class ClanBattleController : Controller
     {
-        private string defaultToken = "JkhcsCfLFJXcwjz9gf4QRkktuzX2loVNAqGEVlwO";
+        private string defaultToken = "N4xRNRxd5Vz9PySYmUW65BKHcOh4pmEfHEb8zVnW";
         string cookieName = "bassnick_munzee_in_map";
         string cookieNameId = "bassnick_munzee_in_map_userId";
 
