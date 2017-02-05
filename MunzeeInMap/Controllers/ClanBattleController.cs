@@ -6,7 +6,7 @@ namespace MunzeeInMap.Controllers
 {
     public class ClanBattleController : Controller
     {
-        private string defaultToken = "N4xRNRxd5Vz9PySYmUW65BKHcOh4pmEfHEb8zVnW";
+        private string defaultToken = "mRLrChib7j0H55pFk5oo1lfsaAdD93wZznO3vyny";
         string cookieName = "bassnick_munzee_in_map";
         string cookieNameId = "bassnick_munzee_in_map_userId";
 
@@ -14,53 +14,53 @@ namespace MunzeeInMap.Controllers
         // GET: /Klani/
         public ActionResult Klani()
         {
-            List<Clan1701> clans = new List<Clan1701>();
+            List<Clan1702> clans = new List<Clan1702>();
 
-            var top = ConcreteClanResults1701("Top.CZ", 591, 5);
+            var top = ConcreteClanResults1702("Top.CZ", 591, 5);
             clans.Add(top);
 
-            var sharks = ConcreteClanResults1701("SHARKS", 497, 5);
+            var sharks = ConcreteClanResults1702("SHARKS", 497, 5);
             clans.Add(sharks);
 
-            var top2 = ConcreteClanResults1701("Top.CZ 2", 719, 3);
+            var top2 = ConcreteClanResults1702("Top.CZ 2", 719, 3);
             clans.Add(top2);
 
-            var czech = ConcreteClanResults1701("CzechTeam", 149, 3);
+            var czech = ConcreteClanResults1702("CzechTeam", 149, 3);
             clans.Add(czech);
 
-            var munzeeMania = ConcreteClanResults1701("MunzeeMania.cs.cz", 80, 3);
+            var munzeeMania = ConcreteClanResults1702("MunzeeMania.cs.cz", 80, 3);
             clans.Add(munzeeMania);
 
-            var klando = ConcreteClanResults1701("KLANdo", 927, 2);
+            var klando = ConcreteClanResults1702("KLANdo", 927, 2);
             clans.Add(klando);
             
-            var bazanti = ConcreteClanResults1701("Bažanti", 442, 2);
-            clans.Add(bazanti);
-
-            var renegati = ConcreteClanResults1701("Renegades.CZ", 955, 2);
+            var renegati = ConcreteClanResults1702("Renegades.CZ", 955, 1);
             clans.Add(renegati);
 
 
-            //var topRezervy = ConcreteClanResults1701("TopRezervy.CZ", 906, 2);
+            //var topRezervy = ConcreteClanResults1702("TopRezervy.CZ", 906, 2);
             //clans.Add(topRezervy);
 
 
-            var topRelax = ConcreteClanResults1701("TopRelax.CZ", 896, 1);
+            var topRelax = ConcreteClanResults1702("TopRelax.CZ", 896, 1);
             clans.Add(topRelax);
 
-            //var ostrava = ConcreteClanResults1701("Ostrava!!!", 561, 1);
+            var bazanti = ConcreteClanResults1702("Bažanti", 442, 1);
+            clans.Add(bazanti);
+
+            //var ostrava = ConcreteClanResults1702("Ostrava!!!", 561, 1);
             //clans.Add(ostrava);
 
             return View("Klani", "", clans);
         }
 
-        private Clan1701 ConcreteClanResults1701(string clanName, int clanId, int declaredLevel)
+        private Clan1702 ConcreteClanResults1702(string clanName, int clanId, int declaredLevel)
         {
             FormCollection fd = new FormCollection();
             fd.Add("access_token", defaultToken);
             fd.Add("clan_id", clanId.ToString());
             string clanStat = Communicate.GetClanStatistics(fd);
-            Battle1701 resultBattle = new Battle1701(clanStat, declaredLevel);
+            Battle1702 resultBattle = new Battle1702(clanStat, declaredLevel);
 
             if (resultBattle.finalLevel == 0 && Request.Cookies[cookieName] != null && Request.Cookies[cookieNameId] != null)
             {
@@ -68,9 +68,9 @@ namespace MunzeeInMap.Controllers
                 fd2.Add("access_token", Request.Cookies[cookieName].Value);
                 fd2.Add("clan_id", clanId.ToString());
                 clanStat = Communicate.GetClanStatistics(fd2);
-                resultBattle = new Battle1701(clanStat, declaredLevel);
+                resultBattle = new Battle1702(clanStat, declaredLevel);
             }
-            Clan1701 resultClan = new Clan1701()
+            Clan1702 resultClan = new Clan1702()
             {
                 ClanId = clanId,
                 ClanName = clanName,
@@ -78,6 +78,75 @@ namespace MunzeeInMap.Controllers
             };
             return resultClan;
         }
+
+        ////
+        //// GET: /Klani/
+        //public ActionResult Klani()
+        //{
+        //    List<Clan1701> clans = new List<Clan1701>();
+
+        //    var top = ConcreteClanResults1701("Top.CZ", 591, 5);
+        //    clans.Add(top);
+
+        //    var sharks = ConcreteClanResults1701("SHARKS", 497, 5);
+        //    clans.Add(sharks);
+
+        //    var top2 = ConcreteClanResults1701("Top.CZ 2", 719, 3);
+        //    clans.Add(top2);
+
+        //    var czech = ConcreteClanResults1701("CzechTeam", 149, 3);
+        //    clans.Add(czech);
+
+        //    var munzeeMania = ConcreteClanResults1701("MunzeeMania.cs.cz", 80, 3);
+        //    clans.Add(munzeeMania);
+
+        //    var klando = ConcreteClanResults1701("KLANdo", 927, 2);
+        //    clans.Add(klando);
+
+        //    var bazanti = ConcreteClanResults1701("Bažanti", 442, 2);
+        //    clans.Add(bazanti);
+
+        //    var renegati = ConcreteClanResults1701("Renegades.CZ", 955, 2);
+        //    clans.Add(renegati);
+
+
+        //    //var topRezervy = ConcreteClanResults1701("TopRezervy.CZ", 906, 2);
+        //    //clans.Add(topRezervy);
+
+
+        //    var topRelax = ConcreteClanResults1701("TopRelax.CZ", 896, 1);
+        //    clans.Add(topRelax);
+
+        //    //var ostrava = ConcreteClanResults1701("Ostrava!!!", 561, 1);
+        //    //clans.Add(ostrava);
+
+        //    return View("Klani", "", clans);
+        //}
+
+        //private Clan1701 ConcreteClanResults1701(string clanName, int clanId, int declaredLevel)
+        //{
+        //    FormCollection fd = new FormCollection();
+        //    fd.Add("access_token", defaultToken);
+        //    fd.Add("clan_id", clanId.ToString());
+        //    string clanStat = Communicate.GetClanStatistics(fd);
+        //    Battle1701 resultBattle = new Battle1701(clanStat, declaredLevel);
+
+        //    if (resultBattle.finalLevel == 0 && Request.Cookies[cookieName] != null && Request.Cookies[cookieNameId] != null)
+        //    {
+        //        FormCollection fd2 = new FormCollection();
+        //        fd2.Add("access_token", Request.Cookies[cookieName].Value);
+        //        fd2.Add("clan_id", clanId.ToString());
+        //        clanStat = Communicate.GetClanStatistics(fd2);
+        //        resultBattle = new Battle1701(clanStat, declaredLevel);
+        //    }
+        //    Clan1701 resultClan = new Clan1701()
+        //    {
+        //        ClanId = clanId,
+        //        ClanName = clanName,
+        //        DetailScore = resultBattle
+        //    };
+        //    return resultClan;
+        //}
 
         ////
         //// GET: /Klani/

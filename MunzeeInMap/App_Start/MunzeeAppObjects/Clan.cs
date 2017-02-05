@@ -5,6 +5,139 @@ using System.Linq;
 
 namespace MunzeeInMap.MunzeeAppObjects
 {
+    public class Clan1702
+    {
+        public int ClanId { get; set; }
+        public string ClanName { get; set; }
+        public Battle1702 DetailScore { get; set; }
+    }
+
+    public class Battle1702 /* TODO HERE*/
+    {
+        public Dictionary<string, int> deploy_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> capture_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> capture_on_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> total_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> number_deps = new Dictionary<string, int>(10);
+        public Dictionary<string, int> capture_jewels_points = new Dictionary<string, int>(10);
+
+        public Dictionary<int, string> playerOrder = new Dictionary<int, string>(10);
+
+        public int finalLevel;
+        public int actualLevel;
+
+        public Battle1702(string str, int finalLevel)
+        {
+            int indexOfResult = str.IndexOf('{', 5) + 1;
+            if (indexOfResult == 0)
+            {
+                return;
+            }
+            /* deploy */
+            int indexOfDeployPts = str.IndexOf("\"deploy\":{");
+
+            /* capture */
+            int indexOfCapturePts = str.IndexOf("\"capture\":{");
+
+            /* capture on*/
+            int indexOfCaptureOnPts = str.IndexOf("\"capture_on\":{");
+
+            /* total */
+            int indexOfTotalPts = str.IndexOf("\"total\":{");
+
+            /* number deployed */
+            int indexOfNumberDeploys = str.IndexOf("\"number of deployed\":{");
+
+            /* number of captured recycle icons */
+            int indexOfCapturePtsFromJewels = str.IndexOf("\"capture points from jewels\":{");
+
+            if (indexOfDeployPts != -1)
+            {
+                indexOfDeployPts += "\"deploy\":{".Length;
+                int indexOfEndDeployPts = str.IndexOf('}', indexOfDeployPts);
+
+                string[] deployesPts =
+                    str.Substring(indexOfDeployPts, indexOfEndDeployPts - indexOfDeployPts).Split(',');
+                deploy_points = GetPlayers(deployesPts);
+            }
+
+            if (indexOfCaptureOnPts != -1)
+            {
+                indexOfCaptureOnPts += "\"capture_on\":{".Length;
+                int indexOfEndCaptureOnPts = str.IndexOf('}', indexOfCaptureOnPts);
+                string[] capturesOnPts =
+                    str.Substring(indexOfCaptureOnPts, indexOfEndCaptureOnPts - indexOfCaptureOnPts).Split(',');
+                capture_on_points = GetPlayers(capturesOnPts);
+            }
+            if (indexOfCapturePts != -1)
+            {
+                indexOfCapturePts += "\"capture\":{".Length;
+                int indexOfEndCapturePts = str.IndexOf('}', indexOfCapturePts);
+                string[] capturesPts =
+                    str.Substring(indexOfCapturePts, indexOfEndCapturePts - indexOfCapturePts).Split(',');
+                capture_points = GetPlayers(capturesPts);
+            }
+
+            if (indexOfTotalPts != -1)
+            {
+                indexOfTotalPts += "\"total\":{".Length;
+                int indexOfEndTotalPts = str.IndexOf('}', indexOfTotalPts);
+                string[] totalsPts = str.Substring(indexOfTotalPts, indexOfEndTotalPts - indexOfTotalPts).Split(',');
+                total_points = GetPlayers(totalsPts);
+
+            }
+
+            if (indexOfNumberDeploys != -1)
+            {
+                indexOfNumberDeploys += "\"number of deployed\":{".Length;
+                int indexOfEndNumberDeploys = str.IndexOf('}', indexOfNumberDeploys);
+                string[] ND = str.Substring(indexOfNumberDeploys, indexOfEndNumberDeploys - indexOfNumberDeploys).Split(',');
+                number_deps = GetPlayers(ND);
+            }
+
+            if (indexOfCapturePtsFromJewels != -1)
+            {
+                indexOfCapturePtsFromJewels += "\"capture points from jewels\":{".Length;
+                int indexOfEndCapturePtsFromJewels = str.IndexOf('}', indexOfCapturePtsFromJewels);
+                string[] NCJ = str.Substring(indexOfCapturePtsFromJewels, indexOfEndCapturePtsFromJewels - indexOfCapturePtsFromJewels).Split(',');
+                capture_jewels_points = GetPlayers(NCJ);
+            }
+
+
+            List<int> list = total_points.Values.ToList();
+            list.Sort();
+            list.Reverse();
+
+            for (int i = 0; i < 10;)
+            {
+                foreach (var playerRecord in total_points)
+                {
+                    if (i >= list.Count || playerRecord.Value == list[i])
+                    {
+                        if (!playerOrder.ContainsValue(playerRecord.Key))
+                            playerOrder.Add(i + 1, playerRecord.Key);
+                        i++;
+                    }
+                }
+            }
+            this.finalLevel = finalLevel;
+        }
+
+        private static Dictionary<string, int> GetPlayers(string[] jsonString)
+        {
+            Dictionary<string, int> playersScores = new Dictionary<string, int>(10);
+            foreach (var jstr in jsonString)
+            {
+                string[] d = jstr.Split(':');
+                int value;
+                int.TryParse(d[1].Trim(new char[] { '"', ' ' }), out value);
+                playersScores.Add(d[0].Trim('"'), value);
+
+            }
+            return playersScores;
+        }
+    }
+
     public class Clan1701
     {
         public int ClanId { get; set; }
@@ -484,6 +617,51 @@ namespace MunzeeInMap.MunzeeAppObjects
         }
     }
 
+    public class Level1702
+    {
+        public Dictionary<int, Requirements1702> level = new Dictionary<int, Requirements1702>();
+
+        public Level1702()
+        {
+            level.Add(1, new Requirements1702()
+            {
+               PlayerPoints = 1000,
+               PlayerDeploys = 5,
+               PlayerCapsJewelPoints = 0,
+               ClanTotalPoints = 15000
+            });
+            level.Add(2, new Requirements1702()
+            {
+                PlayerPoints = 3500,
+                PlayerDeploys = 15,
+                PlayerCapsJewelPoints = 150,
+                ClanTotalPoints = 37500
+            });
+            level.Add(3, new Requirements1702()
+            {
+                PlayerPoints = 7500,
+                PlayerDeploys = 25,
+                PlayerCapsJewelPoints = 300,
+                ClanTotalPoints = 85000
+            });
+            level.Add(4, new Requirements1702()
+            {
+                PlayerPoints = 13000,
+                PlayerDeploys = 35,
+                PlayerCapsJewelPoints = 500,
+                ClanTotalPoints = 150000
+            });
+            level.Add(5, new Requirements1702()
+            {
+                PlayerPoints = 18500,
+                PlayerDeploys = 50,
+                PlayerCapsJewelPoints = 750,
+                ClanTotalPoints = 250000
+                
+            });
+        }
+    }
+
     public class Level1701
     {
         public Dictionary<int, Requirements1701> level = new Dictionary<int, Requirements1701>();
@@ -621,6 +799,14 @@ namespace MunzeeInMap.MunzeeAppObjects
                 ClanCaptures = 1000
             });
         }
+    }
+
+    public class Requirements1702
+    {
+        public int PlayerPoints;
+        public int PlayerDeploys;
+        public int PlayerCapsJewelPoints;
+        public int ClanTotalPoints;
     }
 
     public class Requirements1701
