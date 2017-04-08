@@ -5,6 +5,240 @@ using System.Linq;
 
 namespace MunzeeInMap.MunzeeAppObjects
 {
+
+    public class Clan1704
+    {
+        public int ClanId { get; set; }
+        public string ClanName { get; set; }
+        public Battle1704 DetailScore { get; set; }
+    }
+
+    public class Battle1704 /* TODO HERE*/
+    {
+        public Dictionary<string, int> deploy_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> capture_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> capture_on_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> total_points = new Dictionary<string, int>(10);
+        public Dictionary<string, int> number_deps_green = new Dictionary<string, int>(10);
+        public Dictionary<string, int> number_caps_green = new Dictionary<string, int>(10);
+        public Dictionary<string, int> number_caps_shamrock = new Dictionary<string, int>(10);
+
+        public Dictionary<int, string> playerOrder = new Dictionary<int, string>(10);
+
+        public int finalLevel;
+        public int actualLevel;
+
+        public Battle1704(string str, int finalLevel)
+        {
+            int indexOfResult = str.IndexOf('{', 5) + 1;
+            if (indexOfResult == 0)
+            {
+                return;
+            }
+            /* deploy */
+            //int indexOfDeployPts = str.IndexOf("\"deploy\":{");
+
+            /* capture */
+            int indexOfCapturePts = str.IndexOf("\"capture\":{");
+
+            /* capture on*/
+            //int indexOfCaptureOnPts = str.IndexOf("\"capture_on\":{");
+
+            /* total */
+            int indexOfTotalPts = str.IndexOf("\"total\":{");
+
+            /* number deployed greenies*/
+            //int indexOfNumberDeploysGreenies = str.IndexOf("\"number of deployed greenies\":{");
+
+            /* number captured greenies*/
+            //int indexOfNumberCapturesGreenies = str.IndexOf("\"number of captured greenies\":{");
+
+            /* number captured shamrock*/
+            //int indexOfNumberCapturesShamrocks = str.IndexOf("\"number of captured shamrocks\":{");
+
+            //if (indexOfDeployPts != -1)
+            //{
+            //    indexOfDeployPts += "\"deploy\":{".Length;
+            //    int indexOfEndDeployPts = str.IndexOf('}', indexOfDeployPts);
+
+            //    string[] deployesPts =
+            //        str.Substring(indexOfDeployPts, indexOfEndDeployPts - indexOfDeployPts).Split(',');
+            //    deploy_points = GetPlayers(deployesPts);
+            //}
+
+            //if (indexOfCaptureOnPts != -1)
+            //{
+            //    indexOfCaptureOnPts += "\"capture_on\":{".Length;
+            //    int indexOfEndCaptureOnPts = str.IndexOf('}', indexOfCaptureOnPts);
+            //    string[] capturesOnPts =
+            //        str.Substring(indexOfCaptureOnPts, indexOfEndCaptureOnPts - indexOfCaptureOnPts).Split(',');
+            //    capture_on_points = GetPlayers(capturesOnPts);
+            //}
+            if (indexOfCapturePts != -1)
+            {
+                indexOfCapturePts += "\"capture\":{".Length;
+                int indexOfEndCapturePts = str.IndexOf('}', indexOfCapturePts);
+                string[] capturesPts =
+                    str.Substring(indexOfCapturePts, indexOfEndCapturePts - indexOfCapturePts).Split(',');
+                capture_points = GetPlayers(capturesPts);
+            }
+
+            if (indexOfTotalPts != -1)
+            {
+                indexOfTotalPts += "\"total\":{".Length;
+                int indexOfEndTotalPts = str.IndexOf('}', indexOfTotalPts);
+                string[] totalsPts = str.Substring(indexOfTotalPts, indexOfEndTotalPts - indexOfTotalPts).Split(',');
+                total_points = GetPlayers(totalsPts);
+
+            }
+
+            //if (indexOfNumberDeploysGreenies != -1)
+            //{
+            //    indexOfNumberDeploysGreenies += "\"number of deployed greenies\":{".Length;
+            //    int indexOfEndNumberDeploysGreenies = str.IndexOf('}', indexOfNumberDeploysGreenies);
+            //    string[] NDG = str.Substring(indexOfNumberDeploysGreenies, indexOfEndNumberDeploysGreenies - indexOfNumberDeploysGreenies).Split(',');
+            //    number_deps_green = GetPlayers(NDG);
+            //}
+
+            //if (indexOfNumberCapturesGreenies != -1)
+            //{
+            //    indexOfNumberCapturesGreenies += "\"number of captured greenies\":{".Length;
+            //    int indexOfEndNumberCapturesGreenies = str.IndexOf('}', indexOfNumberCapturesGreenies);
+            //    string[] NCG = str.Substring(indexOfNumberCapturesGreenies, indexOfEndNumberCapturesGreenies - indexOfNumberCapturesGreenies).Split(',');
+            //    number_caps_green = GetPlayers(NCG);
+            //}
+            //if (indexOfNumberCapturesShamrocks != -1)
+            //{
+            //    indexOfNumberCapturesShamrocks += "\"number of captured shamrocks\":{".Length;
+            //    int indexOfEndNumberCapturesShamrocks = str.IndexOf('}', indexOfNumberCapturesShamrocks);
+            //    string[] NCS = str.Substring(indexOfNumberCapturesShamrocks, indexOfEndNumberCapturesShamrocks - indexOfNumberCapturesShamrocks).Split(',');
+            //    number_caps_shamrock = GetPlayers(NCS);
+            //}
+
+            List<int> list = total_points.Values.ToList();
+            list.Sort();
+            list.Reverse();
+
+            for (int i = 0; i < 10;)
+            {
+                foreach (var playerRecord in total_points)
+                {
+                    if (i >= list.Count || playerRecord.Value == list[i])
+                    {
+                        if (!playerOrder.ContainsValue(playerRecord.Key))
+                            playerOrder.Add(i + 1, playerRecord.Key);
+                        i++;
+                    }
+                }
+            }
+            this.finalLevel = finalLevel;
+        }
+
+        private static Dictionary<string, int> GetPlayers(string[] jsonString)
+        {
+            Dictionary<string, int> playersScores = new Dictionary<string, int>(10);
+            foreach (var jstr in jsonString)
+            {
+                string[] d = jstr.Split(':');
+                int value;
+                int.TryParse(d[1].Trim(new char[] { '"', ' ' }), out value);
+                playersScores.Add(d[0].Trim('"'), value);
+
+            }
+            return playersScores;
+        }
+    }
+
+
+    public class NewClan1704
+    {
+        public int ClanId { get; set; }
+        public string ClanName { get; set; }
+        public NewBattle1704 DetailScore { get; set; }
+    }
+
+    public class NewBattle1704
+    {
+        public Dictionary<string, int> total_points = new Dictionary<string, int>(10);
+        public List<KeyValuePair<string, int>> sorted_total_points = new List<KeyValuePair<string, int>>(10);
+        public Dictionary<string, int> caps_points = new Dictionary<string, int>(10);
+        public List<string> usersInfo = new List<string>(10);
+        
+        public int finalLevel;
+        public int actualLevel;
+
+        public NewBattle1704(string str, int finalLevel)
+        {
+
+            int indexOfResult = str.IndexOf('{', 5) + 1;
+            if (indexOfResult == 0)
+            {
+                return;
+            }
+            /* usersinfo */
+            for (int i = 0; i < 10; i++)
+            {
+                int indexOfStartUserInfo = str.IndexOf("{\"username\":", indexOfResult);
+                if (indexOfStartUserInfo != -1)
+                {
+                    indexOfResult = str.IndexOf("}", indexOfStartUserInfo);
+                    usersInfo.Add(str.Substring(indexOfStartUserInfo, indexOfResult - indexOfStartUserInfo + "}".Length));
+                }
+                //else 
+                //    usersInfo.Add(null);
+            }
+
+            /* total */
+            foreach (var tempUser in usersInfo)
+            {
+                //if (userInfo != null)
+                //    continue;
+                int indexOfUserName = "{\"username\":\"".Length;
+                int indexOfEndUserName = tempUser.IndexOf("\"", indexOfUserName);
+                string userName = tempUser.Substring(indexOfUserName, indexOfEndUserName - indexOfUserName);
+
+                int indexOfCapsPts = tempUser.IndexOf("\"capture_points\":");
+                if (indexOfCapsPts != -1)
+                {
+                    indexOfCapsPts += "\"capture_points\":".Length;
+                    int indexOfEndCapsPts = tempUser.IndexOf(",", indexOfCapsPts);
+                    string totalsPts = tempUser.Substring(indexOfCapsPts, indexOfEndCapsPts - indexOfCapsPts);
+                    int cp;
+                    int.TryParse(totalsPts, out cp);
+                    caps_points.Add(userName, cp);
+                }
+                else
+                {
+                    caps_points.Add(userName, 0);
+                }
+
+                int indexOfTotalPts = tempUser.IndexOf("\"total_points\":");
+                if (indexOfTotalPts != -1)
+                {
+                    indexOfTotalPts += "\"total_points\":".Length;
+                    int indexOfEndTotalPts = tempUser.IndexOfAny(new char[] {',','}'}, indexOfTotalPts);
+                    string totalsPts = tempUser.Substring(indexOfTotalPts, indexOfEndTotalPts - indexOfTotalPts);
+                    int tp;
+                    int.TryParse(totalsPts, out tp);
+                    total_points.Add(userName, tp);
+                    
+                }
+                else
+                {
+                    total_points.Add(userName, 0);
+                }
+            }
+            sorted_total_points = total_points.ToList();
+
+            sorted_total_points.Sort((pair1, pair2) => pair2.Value.CompareTo(pair1.Value));
+
+            
+
+            this.finalLevel = finalLevel;
+        }
+    }
+
+
     public class Clan1703
     {
         public int ClanId { get; set; }
@@ -761,6 +995,56 @@ namespace MunzeeInMap.MunzeeAppObjects
         }
     }
 
+    public class Level1704
+    {
+        public Dictionary<int, Requirements1704> level = new Dictionary<int, Requirements1704>();
+
+        public Level1704()
+        {
+            level.Add(1, new Requirements1704()
+            {
+                PlayerCapturePoints = 750,
+                PlayerTotalPoints = 1250,
+                ClanCapturePoints = 9000,
+                ClanTotalPoints = 15000,
+                ClanEventPins = 0
+            });
+            level.Add(2, new Requirements1704()
+            {
+                PlayerCapturePoints = 2000,
+                PlayerTotalPoints = 3500,
+                ClanCapturePoints = 30000,
+                ClanTotalPoints = 55000,
+                ClanEventPins = 0
+            });
+            level.Add(3, new Requirements1704()
+            {
+                PlayerCapturePoints = 4500,
+                PlayerTotalPoints = 7000,
+                ClanCapturePoints = 60000,
+                ClanTotalPoints = 100000,
+                ClanEventPins = 0
+            });
+            level.Add(4, new Requirements1704()
+            {
+                PlayerCapturePoints = 10000,
+                PlayerTotalPoints = 15000,
+                ClanCapturePoints = 140000,
+                ClanTotalPoints = 200000,
+                ClanEventPins = 0
+            });
+            level.Add(5, new Requirements1704()
+            {
+                PlayerCapturePoints = 20000,
+                PlayerTotalPoints = 30000,
+                ClanCapturePoints = 300000,
+                ClanTotalPoints = 450000,
+                ClanEventPins = 1
+            });
+        }
+    }
+
+
     public class Level1703
     {
         public Dictionary<int, Requirements1703> level = new Dictionary<int, Requirements1703>();
@@ -994,6 +1278,16 @@ namespace MunzeeInMap.MunzeeAppObjects
                 ClanCaptures = 1000
             });
         }
+    }
+
+    public class Requirements1704
+    {
+        public int PlayerTotalPoints;
+        public int PlayerCapturePoints;
+        public int ClanTotalPoints;
+        public int ClanCapturePoints;
+        public int ClanEventPins;
+
     }
 
     public class Requirements1703
