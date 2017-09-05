@@ -213,6 +213,7 @@
     <Content Include="Content\zelena_fajfka-2.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <None Include="Properties\PublishProfiles\Import Na FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ostraNaFtp.pubxml" />
     <None Include="Properties\PublishProfiles\pripravit.pubxml" />
     <None Include="Properties\Settings.settings">

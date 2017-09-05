@@ -6,7 +6,7 @@ namespace MunzeeInMap.Controllers
 {
     public class ClanBattleController : Controller
     {
-        private string defaultToken = "YaEijcDcJ0iLo2j8XOGvmrYuQXSn8qw19t3vOtL8";
+        private string defaultToken = "wzWcnwIFynKQ8GykEVVzU8V5EyVPeSU3wSRPRvzu";
         string cookieName = "bassnick_munzee_in_map";
         string cookieNameId = "bassnick_munzee_in_map_userId";
 
@@ -14,55 +14,62 @@ namespace MunzeeInMap.Controllers
         // GET: /Klani/
         public ActionResult Klani()
         {
-            List<Clan1705> clans = new List<Clan1705>();
+            List<Clan1709> clans = new List<Clan1709>();
 
-            var czech = ConcreteClanResults1705("CzechTeam", 149, 5);
-            clans.Add(czech);
-
-            var top = ConcreteClanResults1705("Top.CZ", 591, 4);
+            var top = ConcreteClanResults1709("Top.CZ", 591, 5);
             clans.Add(top);
 
-            var munzeeMania = ConcreteClanResults1705("MunzeeMania.cs.cz", 80, 3);
-            clans.Add(munzeeMania);
-            
-            var klando = ConcreteClanResults1705("KLANdo", 927, 3);
-            clans.Add(klando);
-
-            var top2 = ConcreteClanResults1705("Top.CZ 2", 719, 2);
+            var top2 = ConcreteClanResults1709("Top.CZ 2", 719, 4);
             clans.Add(top2);
 
-            var ostrava = ConcreteClanResults1705("Ostrava!!!", 561, 2);
-            clans.Add(ostrava);
-
-            var sharks = ConcreteClanResults1705("SHARKS", 497, 2);
+            var sharks = ConcreteClanResults1709("SHARKS", 497, 3);
             clans.Add(sharks);
 
-            
-            var renegati = ConcreteClanResults1705("Renegades.CZ", 955, 2);
+            var czech = ConcreteClanResults1709("CzechTeam", 149, 3);
+            clans.Add(czech);
+
+            var munzeeMania = ConcreteClanResults1709("MunzeeMania.cs.cz", 80, 3);
+            clans.Add(munzeeMania);
+
+            var klando = ConcreteClanResults1709("KLANdo", 927, 2);
+            clans.Add(klando);
+
+            var renegati = ConcreteClanResults1709("Renegades.CZ", 955, 2);
             clans.Add(renegati);
 
-
-            //var topRezervy = ConcreteClanResults1705("TopRezervy.CZ", 906, 2);
-            //clans.Add(topRezervy);
-
-            var bazanti = ConcreteClanResults1705("Bažanti", 442, 1);
+            var bazanti = ConcreteClanResults1709("Bažanti", 442, 1);
             clans.Add(bazanti);
 
-            var topRelax = ConcreteClanResults1705("TopRelax.CZ", 896, 1);
+            var topRelax = ConcreteClanResults1709("TopRelax.CZ", 896, 1);
             clans.Add(topRelax);
+
+            
+            
+            
+            
+            
+            //var ostrava = ConcreteClanResults1709("Ostrava!!!", 561, 2);
+            //clans.Add(ostrava);
+
+            
+
+
+            //var topRezervy = ConcreteClanResults1709("TopRezervy.CZ", 906, 2);
+            //clans.Add(topRezervy);
+
 
             
             
             return View("Klani", "", clans);
         }
 
-        private Clan1705 ConcreteClanResults1705(string clanName, int clanId, int declaredLevel)
+        private Clan1709 ConcreteClanResults1709(string clanName, int clanId, int declaredLevel)
         {
             FormCollection fd = new FormCollection();
             fd.Add("access_token", defaultToken);
             fd.Add("clan_id", clanId.ToString());
             string clanStat = Communicate.GetClanStatistics(fd);
-            Battle1705 resultBattle = new Battle1705(clanStat, declaredLevel);
+            Battle1709 resultBattle = new Battle1709(clanStat, declaredLevel);
 
             if (resultBattle.finalLevel == 0 && Request.Cookies[cookieName] != null && Request.Cookies[cookieNameId] != null)
             {
@@ -70,9 +77,9 @@ namespace MunzeeInMap.Controllers
                 fd2.Add("access_token", Request.Cookies[cookieName].Value);
                 fd2.Add("clan_id", clanId.ToString());
                 clanStat = Communicate.GetClanStatistics(fd2);
-                resultBattle = new Battle1705(clanStat, declaredLevel);
+                resultBattle = new Battle1709(clanStat, declaredLevel);
             }
-            Clan1705 resultClan = new Clan1705()
+            Clan1709 resultClan = new Clan1709()
             {
                 ClanId = clanId,
                 ClanName = clanName,
