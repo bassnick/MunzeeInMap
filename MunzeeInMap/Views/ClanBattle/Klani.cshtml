@@ -1,16 +1,16 @@
 ﻿@using System
 @using MunzeeInMap.MunzeeAppObjects
-@model System.Collections.Generic.List<MunzeeInMap.MunzeeAppObjects.Clan1709>
+@model System.Collections.Generic.List<MunzeeInMap.MunzeeAppObjects.Clan1710>
 
 @{
-    ViewBag.Title = "Klání 17/09";
+    ViewBag.Title = "Klání 17/10";
 }
 <br />
 @Html.RouteLink("Autorizace pro GPX data pro GeoGet", "Autorizace")
 <br/>
 <strong>Data z oficiálních klanových statistik MHQ. Aktualizováno jednou denně se začátkem munzee dne (tj. půlnoc Texaského času). U nás ráno v 7:00</strong>
 <br/>
-@if (DateTime.Now > new DateTime(2017, 10, 3, 6, 59, 59))
+@if (DateTime.Now > new DateTime(2017, 11, 3, 6, 59, 59))
 {
     <div>Funkcionalita pro aktuální klání nebyla ještě naprogramována.</div>
 }
@@ -18,25 +18,26 @@ else
 {
     foreach (var klan in Model)
     {
-        Level1709 levelRequirements = new Level1709();
+        Level1710 levelRequirements = new Level1710();
 
         if (klan.DetailScore.finalLevel == 0)
         {
             continue;
         }
-        Requirements1709 req = levelRequirements.level[klan.DetailScore.finalLevel];
+        Requirements1710 req = levelRequirements.level[klan.DetailScore.finalLevel];
 
         <article>
             <table class="klan">
                 <thead>
-                <tr class="popis"><td colspan="3">Klání 17/09 - @klan.ClanName - cíl: level @klan.DetailScore.finalLevel.ToString()</td></tr>
-                <tr><th>Hráč</th><th>Bodů za aktivitu</th><th>Celkově bodů</th></tr>
+                <tr class="popis"><td colspan="4">Klání 17/10 - @klan.ClanName - cíl: level @klan.DetailScore.finalLevel.ToString()</td></tr>
+                <tr><th>Hráč</th><th>Bodů</th><th>Zelené odlovené</th><th>Zelené publikované</th></tr>
                 </thead>
                 <tbody>
                 @{
                     int clanTot = 0;
-                    int clanAP = 0;
-                    Battle1709 battle = @klan.DetailScore;
+                    int clanCG = 0;
+                    int clanDG = 0;
+                    Battle1710 battle = @klan.DetailScore;
                         
                 }
                 @for (int poradi = 1; poradi <= 10 && battle.playerOrder.Count >= poradi ; poradi++)
@@ -44,45 +45,41 @@ else
 
                         string player = battle.playerOrder[poradi];
 
-                        int ap = battle.activity_points.ContainsKey(player) ? battle.activity_points[player] : 0;
+                        int cg = battle.number_captured_greenies.ContainsKey(player) ? battle.number_captured_greenies[player] : 0;
+                        int dg = battle.number_deployed_greenies.ContainsKey(player) ? battle.number_deployed_greenies[player] : 0;
                         int tot = battle.total_points.ContainsKey(player) ? battle.total_points[player] : 0;
 
-                        bool donePlayerAP = ap >= req.PlayerActivityPoints;
-                        int restPlayerAP = req.PlayerActivityPoints - ap;
-                        int percentagePlayerAP = (ap*100*10)/req.ClanActivityPoints;
+                        bool donePlayerCG = cg >= req.PlayerCapturedGreenies;
+                        bool donePlayerPts = tot >= req.PlayerPoints;
+                        int restPlayerCG = req.PlayerCapturedGreenies - cg;
+                        int restPlayerPts = req.PlayerPoints - tot;
+                        
+                        int percentagePlayerCG = (cg*100*10)/req.ClanCapturedGreenies;
+                        int percentagePlayerDG = (dg * 100 * 10) / req.ClanDeployedGreenies;
                         int percentagePlayerTot = (tot*100*10)/req.ClanTotalPoints;
 
-                        int restOptimumPlayerAP = req.ClanActivityPoints/10 - ap;
-                        int restOptimumPlayerTot = req.ClanTotalPoints/10 - tot;
+                        int restOptimumPlayerCG = req.ClanCapturedGreenies/10 - cg;
+                        int restOptimumPlayerDG = req.ClanDeployedGreenies / 10 - dg;
+                        int restOptimumPlayerTot = req.ClanTotalPoints / 10 - tot;
 
                         clanTot += tot;
-                        clanAP += ap;
+                        clanCG += cg;
+                        clanDG +=dg;
 
                         string printOK = ":)";
                         <tr>
                             <td><strong>@player</strong></td>
-                            <td>@ap
-                                @if (donePlayerAP)
+                            <td>
+                                @tot
+                                @if (donePlayerPts)
                                 {
                                     <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
                                 }
                                 else
                                 {
-                                    <span>(<strong>@(-restPlayerAP)</strong>)</span>
+                                    <span>(<strong>@(-restPlayerPts)</strong>)</span>
                                 }
-                                <span>
-                                (@percentagePlayerAP%;
-                                @if (percentagePlayerAP < 100)
-                                {
-                                    <span>@(-restOptimumPlayerAP)</span>
-                                }
-                                )
-                            </span>
-                            </td>
-                            <td>
-                                @tot
 
-                                <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
                                 <span>
                                 (@percentagePlayerTot%;
                                 @if (percentagePlayerTot < 100)
@@ -92,36 +89,79 @@ else
                                 )
                             </span>
                             </td>
+                            <td>
+                                @cg
+                                @if (donePlayerCG)
+                                {
+                                    <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png" />
+                                }
+                                else
+                                {
+                                    <span>(<strong>@(-restPlayerCG)</strong>)</span>
+                                }
+                                <span>
+                                    (@percentagePlayerCG%;
+                                    @if (percentagePlayerCG < 100)
+                                    {
+                                        <span>@(-restOptimumPlayerCG)</span>
+                                    }
+                                    )
+                                </span>
+                            <td>
+                                @dg
+                                <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png" />
+                                <span>
+                                    (@percentagePlayerDG%;
+                                    @if (percentagePlayerDG < 100)
+                                    {
+                                        <span>@(-restOptimumPlayerDG)</span>
+                                    }
+                                    )
+                                </span>
+                            </td>
                         </tr>
                 }
                 </tbody>
                 <tfoot>
                 @{
-                    bool doneClanAP = clanAP >= req.ClanActivityPoints;
+                    bool doneClanCG = clanCG >= req.ClanCapturedGreenies;
+                    bool doneClanDG = clanDG >= req.ClanDeployedGreenies;
                     bool doneClanTots = clanTot >= req.ClanTotalPoints;
-                    int restClanAP = req.ClanActivityPoints - clanAP;
+                    int restClanCG = req.ClanCapturedGreenies - clanCG;
+                    int restClanDG = req.ClanDeployedGreenies - clanDG;
                     int restClanTots = req.ClanTotalPoints - clanTot;
                 }
                 <tr class="popis">
                     <td></td>
-                    <td>@clanAP.ToString()
-                        @if (doneClanAP)
+                    <td>
+                        @clanTot.ToString()
+                        @if (doneClanTots)
+                        {
+                            <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png" />
+                        }
+                        else
+                        {
+                            <span><strong>(@(-restClanTots))</strong></span>
+                        }
+                    </td>
+                    <td>@clanCG.ToString()
+                        @if (doneClanCG)
                         {
                             <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png"/>
                         }
                         else
                         {
-                            <span><strong>(@(-restClanAP))</strong></span>
+                            <span><strong>(@(-restClanCG))</strong></span>
                         }</td>
                     <td>
-                        @clanTot.ToString()
-                    @if (doneClanTots)
+                        @clanDG.ToString()
+                    @if (doneClanDG)
                     {
                         <img class="fajfka" alt=":)" src="~/Content/zelena_fajfka-2.png" />
                     }
                     else
                     {
-                        <span><strong>(@(-restClanTots))</strong></span>
+                        <span><strong>(@(-restClanDG))</strong></span>
                     }
                 </td>
                 </tr>
