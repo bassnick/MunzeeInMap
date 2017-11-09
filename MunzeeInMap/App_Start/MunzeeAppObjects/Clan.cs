@@ -6,26 +6,26 @@ using System.Linq;
 namespace MunzeeInMap.MunzeeAppObjects
 {
 
-    public class Clan1710
+    public class Clan1711
     {
         public int ClanId { get; set; }
         public string ClanName { get; set; }
-        public Battle1710 DetailScore { get; set; }
+        public Battle1711 DetailScore { get; set; }
     }
 
-    public class Battle1710 
+    public class Battle1711 
     {
         public Dictionary<string, int> deploy_points = new Dictionary<string, int>(10);
         public Dictionary<string, int> capture_points = new Dictionary<string, int>(10);
         public Dictionary<string, int> capture_on_points = new Dictionary<string, int>(10);
         public Dictionary<string, int> total_points = new Dictionary<string, int>(10);
-        public Dictionary<string, int> number_deployed_greenies = new Dictionary<string, int>(10);
-        public Dictionary<string, int> number_captured_greenies = new Dictionary<string, int>(10);
+        public Dictionary<string, int> number_deployed_jewels = new Dictionary<string, int>(10);
+        public Dictionary<string, int> number_captured_jewels = new Dictionary<string, int>(10);
         public Dictionary<int, string> playerOrder = new Dictionary<int, string>(10);
         public int finalLevel;
         public int actualLevel;
 
-        public Battle1710(string str, int finalLevel)
+        public Battle1711(string str, int finalLevel)
         {
             int indexOfResult = str.IndexOf('{', 5) + 1;
             if (indexOfResult == 0)
@@ -44,11 +44,11 @@ namespace MunzeeInMap.MunzeeAppObjects
             /* total */
             int indexOfTotalPts = str.IndexOf("\"total\":{");
 
-            /* number deployed greenies*/
-            int indexOfDepGreen = str.IndexOf("\"number of deployed greenies\":{");
+            /* number deployed jewels*/
+            int indexOfDepJewels = str.IndexOf("\"number of deployed jewels\":{");
 
-            /* number captured greenies*/
-            int indexOfCapGreen = str.IndexOf("\"number of captured greenies\":{");
+            /* number captured jewels*/
+            int indexOfCapJewels = str.IndexOf("\"number of captured jewels\":{");
             if (indexOfDeployPts != -1)
             {
                 indexOfDeployPts += "\"deploy\":{".Length;
@@ -85,19 +85,19 @@ namespace MunzeeInMap.MunzeeAppObjects
 
             }
 
-            if (indexOfDepGreen != -1)
+            if (indexOfDepJewels != -1)
             {
-                indexOfDepGreen += "\"number of deployed greenies\":{".Length;
-                int indexOfEndDepGreen = str.IndexOf('}', indexOfDepGreen);
-                string[] NDG = str.Substring(indexOfDepGreen, indexOfEndDepGreen - indexOfDepGreen).Split(',');
-                number_deployed_greenies = GetPlayers(NDG);
+                indexOfDepJewels += "\"number of deployed jewels\":{".Length;
+                int indexOfEndDepJewels = str.IndexOf('}', indexOfDepJewels);
+                string[] NDJ = str.Substring(indexOfDepJewels, indexOfEndDepJewels - indexOfDepJewels).Split(',');
+                number_deployed_jewels = GetPlayers(NDJ);
             }
-            if (indexOfCapGreen != -1)
+            if (indexOfCapJewels != -1)
             {
-                indexOfCapGreen += "\"number of captured greenies\":{".Length;
-                int indexOfEndCapGreen = str.IndexOf('}', indexOfCapGreen);
-                string[] NCG = str.Substring(indexOfCapGreen, indexOfEndCapGreen - indexOfCapGreen).Split(',');
-                number_captured_greenies = GetPlayers(NCG);
+                indexOfCapJewels += "\"number of captured jewels\":{".Length;
+                int indexOfEndCapJewels = str.IndexOf('}', indexOfCapJewels);
+                string[] NCJ = str.Substring(indexOfCapJewels, indexOfEndCapJewels - indexOfCapJewels).Split(',');
+                number_captured_jewels = GetPlayers(NCJ);
             }
 
             List<int> list = total_points.Values.ToList();
@@ -133,62 +133,65 @@ namespace MunzeeInMap.MunzeeAppObjects
         }
     }
 
-    public class Level1710
+    public class Level1711
     {
-        public Dictionary<int, Requirements1710> level = new Dictionary<int, Requirements1710>();
+        public Dictionary<int, Requirements1711> level = new Dictionary<int, Requirements1711>();
 
-        public Level1710()
+        public Level1711()
         {
-            level.Add(1, new Requirements1710()
+            level.Add(1, new Requirements1711()
             {
-               PlayerPoints = 5000,
-               PlayerCapturedGreenies = 10,
-               ClanCapturedGreenies = 125,
-               ClanDeployedGreenies = 30,
-               ClanTotalPoints = 75000
+                PlayerCapturedJewels = 0,
+                PlayerPoints = 3500,
+               ClanCapturedJewels = 100,
+               ClanDeployedJewels = 0,
+               ClanTotalPoints = 50000
             });
-            level.Add(2, new Requirements1710()
+            level.Add(2, new Requirements1711()
             {
+                PlayerCapturedJewels = 0,
                 PlayerPoints = 10000,
-                PlayerCapturedGreenies = 15,
-                ClanCapturedGreenies = 200,
-                ClanDeployedGreenies = 60,
-                ClanTotalPoints = 125000
+                ClanCapturedJewels = 200,
+                ClanDeployedJewels = 50,
+                ClanTotalPoints = 150000
+               
             });
-            level.Add(3, new Requirements1710()
+            level.Add(3, new Requirements1711()
             {
-                PlayerPoints = 17500,
-                PlayerCapturedGreenies = 20,
-                ClanCapturedGreenies = 300,
-                ClanDeployedGreenies = 90,
-                ClanTotalPoints = 200000
+               PlayerCapturedJewels = 25,
+               PlayerPoints = 20000,
+               ClanCapturedJewels = 300,
+               ClanDeployedJewels = 125,
+               ClanTotalPoints = 225000
             });
-            level.Add(4, new Requirements1710()
+            level.Add(4, new Requirements1711()
             {
-                PlayerPoints = 25000,
-                PlayerCapturedGreenies = 25,
-                ClanCapturedGreenies = 350,
-                ClanDeployedGreenies = 120,
-                ClanTotalPoints = 300000
+               PlayerCapturedJewels = 35,
+               PlayerPoints = 30000,
+               ClanCapturedJewels = 400,
+               ClanDeployedJewels = 175,
+               ClanTotalPoints = 350000
             });
-            level.Add(5, new Requirements1710()
+            level.Add(5, new Requirements1711()
             {
-                PlayerPoints = 40000,
-                PlayerCapturedGreenies = 50,
-                ClanCapturedGreenies = 750,
-                ClanDeployedGreenies = 300,
-                ClanTotalPoints = 450000
+               PlayerCapturedJewels = 50,
+               PlayerPoints = 40000,
+               ClanCapturedJewels = 550,
+               ClanDeployedJewels = 250,
+               ClanTotalPoints = 450000
             });
         }
     }
 
-    public class Requirements1710
+    public class Requirements1711
     {
+        public int PlayerCapturedJewels;
         public int PlayerPoints;
-        public int PlayerCapturedGreenies;
-        public int ClanCapturedGreenies;
-        public int ClanDeployedGreenies;
+        public int ClanCapturedJewels;
+        public int ClanDeployedJewels;
         public int ClanTotalPoints;
+        
+        
     }
 
 
